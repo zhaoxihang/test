@@ -3,6 +3,7 @@
 
 namespace app\home\controller;
 
+use app\application\combo\lib\MealBuilder;
 use app\calculator\Operator;
 use app\validate\Calculation;
 use think\exception\ValidateException;
@@ -29,6 +30,11 @@ class Index
     }
 
     public function test(){
-        echo '测试';
+        $meal = MealBuilder::prepareVegMeal();
+        $meal->showItems();
+    }
+
+    public function index($a){
+        return $a;
     }
 }
