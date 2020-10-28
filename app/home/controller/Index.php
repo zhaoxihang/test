@@ -10,15 +10,13 @@ use app\application\factory\lib\ShapeFactory;
 use app\calculator\Operator;
 use app\validate\Calculation;
 use think\exception\ValidateException;
-use think\Validate;
-
 class Index
 {
     public function calculation(){
         $param = input();
-        $num_one = $param['num_one'] = 1;
-        $num_two = $param['num_two'] = 2;
-        $operator = $param['operator'] = 4;
+        $param['num_one'] = 1;
+        $param['num_two'] = 2;
+        $param['operator'] = 4;
 
         //vaildata 验证必传
         try {

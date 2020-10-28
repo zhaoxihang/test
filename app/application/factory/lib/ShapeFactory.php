@@ -7,6 +7,7 @@ namespace app\application\factory\lib;
 use app\application\abstractFactory\AbstractFactory;
 use app\application\factory\Interfaces\Color;
 use app\application\factory\Interfaces\Shape;
+use http\Exception\RuntimeException;
 
 /**
  * 图形工厂
@@ -19,7 +20,7 @@ class ShapeFactory extends AbstractFactory
 
     public function getShape(string $shapeType):Shape{
         if(empty($shapeType)){
-            throw new \RuntimeException('Shape参数有误:', 40004);
+            throw new RuntimeException('Shape参数有误:', 40004);
         }
 
         $method['code'] = parse_name($shapeType, 1);
@@ -27,7 +28,7 @@ class ShapeFactory extends AbstractFactory
         if (class_exists($class)) {
             $this->instance = new $class();
         } else {
-            throw new \RuntimeException('Shape for Method:', 40004);
+            throw new RuntimeException('Shape for Method:', 40004);
         }
 
         return $this->instance;
