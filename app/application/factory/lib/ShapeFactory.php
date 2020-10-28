@@ -4,6 +4,8 @@
 namespace app\application\factory\lib;
 
 
+use app\application\abstractFactory\AbstractFactory;
+use app\application\factory\Interfaces\Color;
 use app\application\factory\Interfaces\Shape;
 
 /**
@@ -11,7 +13,7 @@ use app\application\factory\Interfaces\Shape;
  * Class ShapeFactory
  * @package app\application\factory\lib
  */
-class ShapeFactory
+class ShapeFactory extends AbstractFactory
 {
     private $instance ;
 
@@ -29,5 +31,10 @@ class ShapeFactory
         }
 
         return $this->instance;
+    }
+
+    public function getColor(string $color): Color
+    {
+        return null;
     }
 }

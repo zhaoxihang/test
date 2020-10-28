@@ -3,7 +3,9 @@
 
 namespace app\home\controller;
 
+use app\application\abstractFactory\FactoryProducer;
 use app\application\combo\lib\MealBuilder;
+use app\application\factory\lib\ColorFactory;
 use app\application\factory\lib\ShapeFactory;
 use app\calculator\Operator;
 use app\validate\Calculation;
@@ -30,6 +32,9 @@ class Index
         return $number;
     }
 
+    /**
+     * 建造者模式：以套餐为例子
+     */
     public function test(){
         $meal = MealBuilder::prepareVegMeal();
         $combo = $meal->showItems();
@@ -37,10 +42,29 @@ class Index
         echo $combo;
     }
 
-    public function main(){
+    /**
+     * 工厂模式：以图形和颜色为例子
+     */
+    public function factory(){
         $shapeFactory = new ShapeFactory();
         $shape = $shapeFactory->getShape('Circle');
-        echo $shape->draw();
+        echo $shape->draw()."</br>";
+        $colorFactory = new ColorFactory();
+        $color = $colorFactory->getColor('Red');
+        echo $color->fill();
+    }
+
+    /**
+     * 抽象工厂：以上述两个工厂为例子
+     * 就包了一层，不知道有什么用
+     */
+    public function abstractFactoryDemo(){
+        $shapeFactory = FactoryProducer::getFactory('Shape');
+        $shape = $shapeFactory->getShape('Circle');
+        echo $shape->draw()."</br>";
+        $colorFactory = FactoryProducer::getFactory('Color');
+        $color = $colorFactory->getColor('Red');
+        echo $color->fill();
     }
 
     public function index($a){
