@@ -1,0 +1,33 @@
+<?php
+
+
+namespace app\application\factory\lib;
+
+
+use app\application\factory\Interfaces\Shape;
+
+/**
+ * 图形工厂
+ * Class ShapeFactory
+ * @package app\application\factory\lib
+ */
+class ShapeFactory
+{
+    private $instance ;
+
+    public function getShape(string $shapeType):Shape{
+        if(empty($shapeType)){
+            throw new \RuntimeException('Shape参数有误:', 40004);
+        }
+
+        $method['code'] = parse_name($shapeType, 1);
+        $class = __NAMESPACE__ . "\\shape\\" .$method['code'];
+        if (class_exists($class)) {
+            $this->instance = new $class();
+        } else {
+            throw new \RuntimeException('Shape for Method:', 40004);
+        }
+
+        return $this->instance;
+    }
+}

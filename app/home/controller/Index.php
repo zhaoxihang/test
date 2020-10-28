@@ -4,6 +4,7 @@
 namespace app\home\controller;
 
 use app\application\combo\lib\MealBuilder;
+use app\application\factory\lib\ShapeFactory;
 use app\calculator\Operator;
 use app\validate\Calculation;
 use think\exception\ValidateException;
@@ -34,6 +35,12 @@ class Index
         $combo = $meal->showItems();
         trace($combo,'套餐');
         echo $combo;
+    }
+
+    public function main(){
+        $shapeFactory = new ShapeFactory();
+        $shape = $shapeFactory->getShape('Circle');
+        echo $shape->draw();
     }
 
     public function index($a){
