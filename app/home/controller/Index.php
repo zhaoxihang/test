@@ -31,7 +31,9 @@ class Index
 
     public function test(){
         $meal = MealBuilder::prepareVegMeal();
-        $meal->showItems();
+        $combo = $meal->showItems();
+        trace($combo,'套餐');
+        echo $combo;
     }
 
     public function index($a){

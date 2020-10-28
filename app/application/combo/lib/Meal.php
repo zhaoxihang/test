@@ -42,6 +42,6 @@ class Meal
             $str .= "价格：".$v->price()."</br>";
         }
         $str .= "总价格：".$this->getCost();
-        echo $str;
+        return $str;
     }
 }
