@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ea75b970e0b216daf126b26bb910d895",
+    "content-hash": "7ad8fb6f6b8b8458642926dc8c670cb6",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -479,6 +479,58 @@
                 "random"
             ],
             "time": "2018-07-02T15:55:56+00:00"
+        },
+        {
+            "name": "phpenum/phpenum",
+            "version": "v1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yinfuyuan/php-enum.git",
+                "reference": "1c73305eae512a2d03e8d46e20817edd01ad1995"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yinfuyuan/php-enum/zipball/1c73305eae512a2d03e8d46e20817edd01ad1995",
+                "reference": "1c73305eae512a2d03e8d46e20817edd01ad1995",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7",
+                "squizlabs/php_codesniffer": "1.*",
+                "vimeo/psalm": "^3.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PhpEnum\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "yinfuyuan",
+                    "email": "yinfuyuan@gmail.com"
+                }
+            ],
+            "description": "PHP Enum",
+            "homepage": "https://github.com/yinfuyuan/php-enum",
+            "keywords": [
+                "enum",
+                "phpenum"
+            ],
+            "time": "2020-07-22T08:36:33+00:00"
         },
         {
             "name": "psr/cache",
