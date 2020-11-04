@@ -7,6 +7,12 @@ use app\application\abstractFactory\FactoryProducer;
 use app\application\combo\lib\MealBuilder;
 use app\application\factory\lib\ColorFactory;
 use app\application\factory\lib\ShapeFactory;
+use app\application\filter\lib\AndCriteria;
+use app\application\filter\lib\CriteriaFemale;
+use app\application\filter\lib\CriteriaMale;
+use app\application\filter\lib\CriteriaSingle;
+use app\application\filter\lib\OrCriteria;
+use app\application\filter\lib\Person;
 use app\calculator\Operator;
 use app\validate\Calculation;
 use think\exception\ValidateException;
@@ -64,6 +70,37 @@ class Index
         $color = $colorFactory->getColor('Red');
         echo $color->fill();
     }
+
+    /**
+     * 过滤器模式
+     */
+    public function filter(){
+        $persons = [];
+        $persons[] = new Person('小赵','Male','singleDog');
+        $persons[] = new Person('小钱','Female','Married');
+        $persons[] = new Person('小孙','Female','singleDog');
+        $persons[] = new Person('小李','Male','Married');
+        $persons[] = new Person('小周','Male','singleDog');
+
+        $male = new CriteriaMale();
+        $female = new CriteriaFemale();
+        $single = new CriteriaSingle();
+
+        $singleAndMale = new AndCriteria($single,$male);
+
+
+        $singleOrFemale = new OrCriteria($single,$female);
+
+        $data = [
+            '男人：'=>$male->meetCriteria($persons),
+            '女人：'=>$female->meetCriteria($persons),
+            '单身男性：'=>$singleAndMale->meetCriteria($persons),
+            '单身的和女性'=>$singleOrFemale->meetCriteria($persons)
+        ];
+
+       dump($data);
+    }
+
 
     public function index($a){
         return $a;
