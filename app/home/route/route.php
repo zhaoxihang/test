@@ -11,3 +11,6 @@ Route::get('abstractFactoryDemo','Index/abstractFactoryDemo');
 Route::get('filter','Index/filter');
 //计算器
 Route::get('calculation/:num_one/:num_two/:operator','Index/calculation');
+//对象池模式
+Route::get('objectOne','Index/objectPoolTestOne');
+Route::get('objectTwo','Index/objectPoolTestTwo');

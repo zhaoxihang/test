@@ -13,6 +13,7 @@ use app\application\filter\lib\CriteriaMale;
 use app\application\filter\lib\CriteriaSingle;
 use app\application\filter\lib\OrCriteria;
 use app\application\filter\lib\Person;
+use app\application\objectPool\WorkerPool;
 use app\calculator\Operator;
 use app\validate\Calculation;
 use think\exception\ValidateException;
@@ -99,6 +100,38 @@ class Index
         ];
 
        dump($data);
+    }
+
+    /**
+     * 对象池模式
+     */
+    public function objectPoolTestOne()
+    {
+        $pool = new WorkerPool();
+        $worker1 = $pool->get();
+        $worker2 = $pool->get();
+        $worker1->run('one');
+        $worker2->run('two');
+        /**
+         * 两个独立的对象
+         */
+        dump($worker1,$worker2);
+    }
+
+    /**
+     * 对象池模式
+     */
+    public function objectPoolTestTwo()
+    {
+        $pool = new WorkerPool();
+        $worker1 = $pool->get();
+        $pool->dispose($worker1);
+        $worker2 = $pool->get();
+        $worker1->run('one');
+        /**
+         * 两个是同一个对象
+         */
+        dump($worker1,$worker2);
     }
 
 
