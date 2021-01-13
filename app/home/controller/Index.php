@@ -5,6 +5,8 @@ namespace app\home\controller;
 
 use app\application\abstractFactory\FactoryProducer;
 use app\application\combo\lib\MealBuilder;
+use app\application\dependency_injection\Bar;
+use app\application\dependency_injection\Foo;
 use app\application\factory\lib\ColorFactory;
 use app\application\factory\lib\ShapeFactory;
 use app\application\filter\lib\AndCriteria;
@@ -155,6 +157,15 @@ class Index
             $book->setTitle('bar book no'.$i);
             $bar_list[] = $book;
         }
+    }
+
+    public function testInvoke(){
+//        $bar = new Bar();
+//        $foo = new Foo($bar);
+
+        bind('Foo', 'app\application\dependency_injection\Foo');
+        $foo = app('Foo');
+        dd($foo);
     }
 
 

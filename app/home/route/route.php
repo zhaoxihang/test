@@ -17,3 +17,6 @@ Route::get('objectTwo','Index/objectPoolTestTwo');
 //原型模式
 Route::get('prototype','Index/prototype');
 
+//依赖注入
+Route::get('testInvoke','Index/testInvoke');
+
