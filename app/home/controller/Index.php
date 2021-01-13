@@ -138,6 +138,9 @@ class Index
         dump($worker1,$worker2);
     }
 
+    /**
+     * 原型模式
+     */
     public function prototype()
     {
         $fooPrototype = new FooBookPrototype();
@@ -159,6 +162,9 @@ class Index
         }
     }
 
+    /**
+     * 依赖注入
+     */
     public function testInvoke(){
 //        $bar = new Bar();
 //        $foo = new Foo($bar);
