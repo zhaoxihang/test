@@ -14,6 +14,8 @@ use app\application\filter\lib\CriteriaSingle;
 use app\application\filter\lib\OrCriteria;
 use app\application\filter\lib\Person;
 use app\application\objectPool\WorkerPool;
+use app\application\prototype\BarBookPrototype;
+use app\application\prototype\FooBookPrototype;
 use app\calculator\Operator;
 use app\validate\Calculation;
 use think\exception\ValidateException;
@@ -132,6 +134,27 @@ class Index
          * 两个是同一个对象
          */
         dump($worker1,$worker2);
+    }
+
+    public function prototype()
+    {
+        $fooPrototype = new FooBookPrototype();
+        $barPrototype = new BarBookPrototype();
+        $foo_list = [ ];
+        $bar_list = [ ];
+        for ($i = 0; $i < 5; $i++)
+        {
+            $book = clone $fooPrototype;
+            $book->setTitle('foo book no'.$i);
+            $foo_list[] = $book;
+        }
+
+        for ($i = 0; $i < 5; $i++)
+        {
+            $book = clone $barPrototype;
+            $book->setTitle('bar book no'.$i);
+            $bar_list[] = $book;
+        }
     }
 
 

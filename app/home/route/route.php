@@ -14,3 +14,6 @@ Route::get('calculation/:num_one/:num_two/:operator','Index/calculation');
 //对象池模式
 Route::get('objectOne','Index/objectPoolTestOne');
 Route::get('objectTwo','Index/objectPoolTestTwo');
+//原型模式
+Route::get('prototype','Index/prototype');
+
