@@ -3,6 +3,7 @@ use think\facade\Route;
 
 //测试路由
 Route::get('test','Index/test');
+Route::get('worker','Index/worker');
 //工厂模式
 Route::get('factory','Index/factory');
 //抽象工厂

@@ -21,6 +21,8 @@ use app\application\prototype\FooBookPrototype;
 use app\calculator\Operator;
 use app\validate\Calculation;
 use think\exception\ValidateException;
+use think\facade\View;
+
 class Index
 {
     public function calculation(){
@@ -177,5 +179,11 @@ class Index
 
     public function index($a){
         return $a;
+    }
+
+    public function worker(){
+        View::assign('fid',10);
+        View::assign('tid',20);
+        return View::fetch();
     }
 }
