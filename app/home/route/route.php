@@ -21,3 +21,5 @@ Route::get('prototype','Index/prototype');
 //依赖注入
 Route::get('testInvoke','Index/testInvoke');
 
+//微信支付分composer测试
+Route::get('wxscore','Index/wxscore');

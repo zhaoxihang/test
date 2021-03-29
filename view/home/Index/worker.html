@@ -1,95 +1,100 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>Document</title>
-    <style>
-        #mbox{
-            width:50%;
-            margin: 0 auto;
-            border: 1px solid #ccc;
-            box-sizing: content-box;
-            padding: 10px;
-            max-height:500px;
-            overflow: scroll;
-        }
-        #xiaoxi{width:80%;}
-
-        @media screen and (max-width: 768px) {
-            #mbox{
-                width:98%;
-                margin: 0 auto;
-                border: 1px solid #ccc;
-            }
-            #xiaoxi{width:60%;}
-
-        }
-        #mbox h3{
-            color:red;
-        }
-
-    </style>
-</head>
+    <title>HTML5</title>
+    <meta charset="utf-8" />
 <body>
-<div id="mbox">
-    <h3></h3>
-    <hr>
-    <div id="message">
-    </div>
 
-</div>
-<div id="mbox" style="overflow: hidden;">
-    <form  enctype="multipart/form-data">
-        <input type="text" name="name" id="xiaoxi" style="height:30px;">
-        <input type="button" value="发送消息" id="send" >
-    </form>
-</div>
-<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.4.1.min.js"></script>
+<!-- <a href="javascipt:" class="send">发送</a>  -->
 
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script>
-    var ws =new WebSocket("ws:0.0.0.0:8282");
-    var fid="{$fid}";
-    var tid="{$tid}";
-    //接受服务器端消息
-    ws.onmessage=function(e){
-        console.log(e.data);
-        var mesage=JSON.parse(e.data);
-        switch(mesage.type)
-        {
-            case "init":
-                var bind='{"type":"bind","fid":"'+fid+'"}';
-                $("h3").text("与"+tid+"聊天……");
-                //发送消息给服务器
-                ws.send(bind);
-                break;
-            case "text":
-                if(tid==mesage.fid)//当前聊天对象
-                {
-                    $("#message").append('<p style="float:right">'+mesage.data+':SAY'+tid+'<img src="http://0.0.0.0/tp/public/static/'+tid+'.png" style="border-radius:50%"></p><div style="clear: both;"></div>');
-                }
-                break;
-            default:
-                $("#message").append('<p>没有数据！</p>');
 
-        }
+    // $('.send').click(function(){
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: "{:url('index/index/send')}",
+    //         data: {'id':1},
+    //         dataType: 'json',
+    //         success: function (data) {
+    //             if (data.status == 1) {
+    //                 alert('发送成功')
+    //                 // layer.msg(data.msg, { icon: 1, time: 1000 },function(){
+    //                 //     // parent.layer.close(index);
+    //                 //     window.location.reload()
+    //                 //     // parent.location.reload();
+    //                 // });
+    //             } else {
+    //                 alert('发送失败')
+    //                 // layer.msg(data.msg, { icon: 2, time: 1000 });
+    //             }
+    //         },
+    //         error: function () {
+    //             // layer.alert("服务器繁忙, 请联系管理员!");
+    //         },
+    //     });
+    // })
 
-    }
+    $(function() {
+        var socket;
+        var readyState = ["connecting", "connected", "closing", "closed"];
+        /* 打开连接事件 */
+        $("button:eq(0)").click(function() {
+            try {
+                /* 连接 */
+                //  socket = new WebSocket("ws://39.96.9.241:6789");
+                socket = new WebSocket("ws://127.0.0.1:2348");
+                /* 绑定事件 */
+                socket.onopen = function() {
+                    $("#msg").html("连接成功...");
+                };
 
+                socket.onmessage = function(e) {
+                    $("#msg").html($("#msg").html() + "<br />" + e.data);
+                };
 
+                socket.onclose = function() {
+                    $("#msg").html($("#msg").html() + "<br />关闭连接...");
+                };
+            } catch(exception) {
+                $("#msg").html($("#msg").html() + "<br />有错误发生");
+            }
+        });
 
-    $("#send").click(function(){
-        var mes=$("#xiaoxi").val();
-        $("#message").append('<p style="float:left"><img src="http://0.0.0.0/tp/public/static/'+fid+'.png" style="border-radius:50%">'+fid+'SAY:'+mes+'</p><div style="clear: both;"></div>');
-        mes='{"type":"text","data":"'+mes+'","fid":"'+fid+'","tid":"'+tid+'"}';
-        ws.send(mes);
-        console.log(mes)
-        $("#xiaoxi").val('');
-    })
+        /* 发送数据事件 */
+        $("button:eq(1)").click(function() {
+            /* 检查文本框是否为空 */
+            if($("#data").val() == "") {
+                alert("请输入数据！");
+                return;
+            }
 
+            try {
+                socket.send($("#data").val());
+                $("#msg").html($("#msg").html() + "<br />发送数据：" + $("#data").val());
+            } catch (exception) {
+                $("#msg").html($("#msg").html() + "<br />发送数据出错");
+            }
 
+            /* 清空文本框 */
+            $("#data").val("");
+        });
+
+        /* 断开连接 */
+        $("button:eq(2)").click(function() {
+            socket.close();
+        });
+    });
 </script>
+</head>
 
+<body>
+<h1>WebSocket示例</h1>
+<input type="text" id="data" />
+<button>打开连接</button>
+<button>发送数据</button>
+<button>关闭连接</button>
+<p id="msg"></p>
 </body>
 </html>

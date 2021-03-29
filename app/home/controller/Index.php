@@ -22,6 +22,7 @@ use app\calculator\Operator;
 use app\validate\Calculation;
 use think\exception\ValidateException;
 use think\facade\View;
+use WechatPayment\WechatBasePaymentScore;
 
 class Index
 {
@@ -185,5 +186,34 @@ class Index
         View::assign('fid',10);
         View::assign('tid',20);
         return View::fetch();
+    }
+
+    public function wxscore(){
+        $mch_id = '1587434081';
+        //商户v3秘钥
+        $key = 'lQsh29FnPZdBjOI8z750EgzX95nX21zo';
+        //商户秘钥（区别上一条）
+        $api_key = 'BWG87Yk9U8rSk3snzgmvEb6mK225j6Xr';
+        //获取服务ID
+        $service_id = '00002007000000158987297195286642';
+        //商户序列号
+        $service_no = '13DAF54D21758E66C9B0CA6728767DF58F4F0689';
+        //小程序appid
+        $appid = 'wx6c03c9bfa5e5c3ab';
+        //创建订单回调地址
+        $notify_url = 'https://hp.qd.test.zushang.cn/app/score/notify';
+        $apiclient_key = 'https://hp.qd.test.zushang.cn/Application/Common/Conf/cert/lizu/wx/apiclient_key.pem';
+        $config = compact('mch_id','key','api_key','service_id','service_no','appid','notify_url','apiclient_key');
+        $wechat = WechatBasePaymentScore::getInstance($config);
+        //服务信息
+        $resource['service_introduction'] = '123';
+        //商户服务订单号
+        $resource['out_order_no'] = 'a' . time() . rand(1000, 9999);
+        //【先享模式】（评估不通过不可使用服务）可填名称为 ESTIMATE_ORDER_COST：预估订单费用
+        $resource['risk_fund']['name'] = 'DEPOSIT';
+        //风险金额
+        $resource['risk_fund']['amount'] = 20*10;
+        $a = $wechat->run($resource);
+        dd($a);
     }
 }
