@@ -21,6 +21,7 @@ use app\application\prototype\FooBookPrototype;
 use app\calculator\Operator;
 use app\validate\Calculation;
 use think\exception\ValidateException;
+use think\facade\Cache;
 use think\facade\View;
 use WechatPayment\WechatBasePaymentScore;
 
@@ -216,4 +217,23 @@ class Index
         $a = $wechat->run($resource);
         dd($a);
     }
+
+    function setCache(){
+        dump(Cache::set('config',['123','456'],3600));
+    }
+
+    function getCache(){
+        dump(Cache::get('config'));
+    }
+
+    function set_goods_list(){
+        //商品1523，16点结束
+        $goods_id = '1523';
+        Cache::set('goods_'.$goods_id,range(1,100),new \DateTime('2021-03-30 16:00:00'));
+    }
+
+    function get_goods_num(){
+
+    }
+
 }
