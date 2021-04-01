@@ -179,8 +179,8 @@ class Index
     }
 
 
-    public function index($a){
-        return $a;
+    public function index(){
+        return 123456;
     }
 
     public function worker(){
