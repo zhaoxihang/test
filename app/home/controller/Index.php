@@ -190,20 +190,20 @@ class Index
     }
 
     public function wxscore(){
-        $mch_id = '1587434081';
+        $mch_id = '商户id';
         //商户v3秘钥
-        $key = 'lQsh29FnPZdBjOI8z750EgzX95nX21zo';
+        $key = '商户v3秘钥';
         //商户秘钥（区别上一条）
-        $api_key = 'BWG87Yk9U8rSk3snzgmvEb6mK225j6Xr';
+        $api_key = '商户秘钥';
         //获取服务ID
-        $service_id = '00002007000000158987297195286642';
+        $service_id = '获取服务ID';
         //商户序列号
-        $service_no = '13DAF54D21758E66C9B0CA6728767DF58F4F0689';
+        $service_no = '商户序列号';
         //小程序appid
-        $appid = 'wx6c03c9bfa5e5c3ab';
+        $appid = '小程序appid';
         //创建订单回调地址
-        $notify_url = 'https://hp.qd.test.zushang.cn/app/score/notify';
-        $apiclient_key = 'https://hp.qd.test.zushang.cn/Application/Common/Conf/cert/lizu/wx/apiclient_key.pem';
+        $notify_url = '创建订单回调地址';
+        $apiclient_key = 'apiclient_key';
         $config = compact('mch_id','key','api_key','service_id','service_no','appid','notify_url','apiclient_key');
         $wechat = WechatBasePaymentScore::getInstance($config);
         //服务信息
