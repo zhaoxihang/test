@@ -96,7 +96,9 @@ class LoginBase implements ILogin
     }
 
     function loginErrorOperation(){
-        return ['status'=>false,'msg'=>'登录失败'];
+        // todo 获取错误信息
+        $msg = '';
+        return ['status'=>false,'msg'=>$msg];
     }
 
     /**

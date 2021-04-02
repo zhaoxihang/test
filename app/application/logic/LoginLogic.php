@@ -25,10 +25,11 @@ class LoginLogic
 
     private $login_service = false;
 
+    private $user_model = false;
+
 
     function getUserInfo(){
-        // todo 返回用户信息
-        return [];
+        return $this->user_model;
     }
 
     function getLoginService(){
@@ -42,13 +43,13 @@ class LoginLogic
         switch ($param['type'])
         {
             case self::TYPE_MOBILE_LOGIN:
-                return $this->doUserPassLogin($param);
+                return $this->user_model = $this->doUserPassLogin($param);
                 break;
             case self::TYPE_VERIFY_LOGIN:
-                return $this->doUserVerifyLogin($param);
+                return $this->user_model = $this->doUserVerifyLogin($param);
                 break;
             case self::TYPE_REGISTER_LOGIN:
-                return $this->doUserRegisterLogin($param);
+                return $this->user_model = $this->doUserRegisterLogin($param);
                 break;
         }
     }
@@ -73,7 +74,13 @@ class LoginLogic
         return $this->getLoginService()->mobileVerifyLogin($param['mobile'],$param['verification']);
     }
 
+    /**
+     * 注册并登录 可以用密码也可以用短信验证码
+     * @param $param
+     * @return bool|\think\Model
+     */
     function doUserRegisterLogin($param){
+        // todo 校验param中是否有mobile，verification或者password
         return $this->getLoginService()->register($param['mobile'],$param['password'],$param['verification']);
     }
 }

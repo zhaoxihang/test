@@ -5,11 +5,14 @@ namespace app\application\service;
 
 
 use app\application\session\SessionService;
+use app\blog\model\User;
 
 class LoginService
 {
 
     private $web_name = false;
+
+    private $user_model = false;
 
     public function __construct($web_name)
     {
@@ -21,7 +24,9 @@ class LoginService
     }
 
     function mobileVerifyLogin($mobile,$verification){
-        // todo 根据手机号，验证码去查询验证码是否正确，正确就
+        if(!$this->is_verification($mobile,$verification)){
+            return false;
+        }
         return $this->userInfo($mobile);
     }
 
@@ -30,17 +35,38 @@ class LoginService
      * @param $mobile
      * @param bool $password
      * @param bool $verification
-     * @return bool
+     * @return bool|\think\Model
      */
     function register($mobile,$password = false,$verification = false){
-        // todo 根据手机号,密码，验证码去注册用户
-        return $this->userInfo($mobile);
+        if($verification){
+            if(!$this->is_verification($mobile,$verification)){
+                return false;
+            }
+        }
+        $this->user_model = User::createUser(['user_name'=>'默认用户名','mobile'=>$mobile,'password'=>$password]);
+        if($this->user_model->isEmpty()){
+            //todo 错误信息 ：手机号已注册
+            return false;
+        }
+        return $this->user_model;
+    }
+
+    function is_verification($mobile,$verification) :bool
+    {
+        //todo 验证验证码是否正确 todo 错误信息 ：验证码错误
+        return false;
     }
 
     function userInfo($mobile ,$password = false){
-        // todo 根据手机号,密码去查询用户信息 ,查到就返回用户信息 并存session，否则返回false
-//        $fun_name = 'set_'.$this->web_name.'user_id';
-//        SessionService::$fun_name();
-        return false;
+        if($this->user_model == false){
+            $this->user_model = User::getModelForMobileAndPass($mobile,$password);
+        }
+        if($this->user_model->isEmpty()){
+            //todo 错误信息 ：该用户不存在
+            return false;
+        }
+        $fun_name = 'set_'.$this->web_name.'user_id';
+        SessionService::$fun_name($this->user_model->id);
+        return $this->user_model;
     }
 }
