@@ -4,9 +4,12 @@
 namespace app\blog\controller;
 
 
+use app\application\logic\JWTLogic;
+
 class Index
 {
     function index(){
-        return 'blog';
+        $token = JWTLogic::createToken();
+        return $token;
     }
 }

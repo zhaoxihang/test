@@ -5,6 +5,7 @@ namespace app\application\logic;
 
 
 use app\application\service\LoginService;
+use app\application\session\SessionService;
 
 class LoginLogic
 {
@@ -14,6 +15,10 @@ class LoginLogic
     public function __construct($web_name)
     {
         $this->web_name = $web_name.'_';
+    }
+
+    public function hasLogin(){
+        return $this->getLoginService()->hasLogin();
     }
 
     //手机号密码登录

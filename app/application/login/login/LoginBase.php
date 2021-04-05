@@ -33,8 +33,7 @@ class LoginBase implements ILogin
      */
     function hasLogin()
     {
-        $fun_name = 'get_'.$this->web_name.'user_id';
-        return SessionService::$fun_name();
+        return $this->getLoginLogic()->hasLogin();
     }
 
     /**

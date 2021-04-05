@@ -4,6 +4,7 @@
 namespace app\application\service;
 
 
+use app\application\Logic\JwtLogic;
 use app\application\session\SessionService;
 use app\blog\model\User;
 
@@ -14,6 +15,8 @@ class LoginService
 
     private $user_model = false;
 
+    private $token = false;
+
     public function __construct($web_name)
     {
         $this->web_name = $web_name.'_';
@@ -21,6 +24,41 @@ class LoginService
 
     function login($mobile , $password){
         return $this->userInfo($mobile,$password);
+    }
+
+    public function hasLogin(){
+        $login = false;
+        $param_token = input('token');
+        if(self::validationToken($param_token)){
+            $token = self::parseToken($param_token);
+            //判断token里用户信息
+        }
+        return $login;
+    }
+
+    static function validationToken($token){
+        return JwtLogic::validationToken($token);
+    }
+
+    /**
+     * 解析token
+     * @param $token
+     * @return \Lcobucci\JWT\Token|string
+     */
+    static function parseToken($token){
+        return JwtLogic::parseToken($token);
+    }
+
+    /**
+     * 获取token
+     * @return bool|string
+     */
+    public function getToken(){
+        if($this->token == false){
+            $token = JWTLogic::createToken();
+            $this->token = $token;
+        }
+        return $this->token;
     }
 
     function mobileVerifyLogin($mobile,$verification){
