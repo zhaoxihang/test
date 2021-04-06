@@ -13,6 +13,11 @@ final class SessionService
     const KEY_BLOG_USER_ID = 'blog_user_id';
 
     /**
+     * 错误信息
+     */
+    const ERROR_MSG = '';
+
+    /**
      * 取值
      * @param $key
      * @return mixed
@@ -91,5 +96,21 @@ final class SessionService
      */
     static function set_blog_user_id($user_id){
         static::set(static::KEY_BLOG_USER_ID,$user_id);
+    }
+
+    /**
+     * 存储错误信息
+     * @param $msg
+     */
+    static function set_error_msg($msg){
+        static::set(static::ERROR_MSG,$msg);
+    }
+
+    /**
+     * 获取错误信息
+     * @return mixed
+     */
+    static function get_error_msg(){
+        return static::get(static::ERROR_MSG);
     }
 }

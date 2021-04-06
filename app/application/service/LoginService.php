@@ -4,6 +4,7 @@
 namespace app\application\service;
 
 
+use app\application\error\ErrorMsg;
 use app\application\Logic\JwtLogic;
 use app\application\session\SessionService;
 use app\blog\model\User;
@@ -19,25 +20,35 @@ class LoginService
 
     public function __construct($web_name)
     {
-        $this->web_name = $web_name.'_';
+        $this->web_name = $web_name;
     }
 
     function login($mobile , $password){
         return $this->userInfo($mobile,$password);
     }
 
-    public function hasLogin(){
+    public function hasLogin($param_token){
         $login = false;
-        $param_token = input('token');
+        //todo token 查询数据库取得最近一条
         if(self::validationToken($param_token)){
             $token = self::parseToken($param_token);
             //判断token里用户信息
+            $fun_name = 'get_'.$this->web_name.'user_id';
+            if($token->claims()->get('user_id') == SessionService::$fun_name()){
+                $login = true;
+            }
         }
         return $login;
     }
 
+    /**
+     * 验证令牌
+     * @param $token
+     * @return bool
+     */
     static function validationToken($token){
-        return JwtLogic::validationToken($token);
+        $user_id = SessionService::get_blog_user_id();
+        return JwtLogic::validationToken($token,$user_id);
     }
 
     /**
@@ -55,7 +66,11 @@ class LoginService
      */
     public function getToken(){
         if($this->token == false){
-            $token = JWTLogic::createToken();
+            $user_id = SessionService::get_blog_user_id();
+            $token = JWTLogic::createToken($user_id);
+
+            //todo token 存数据库，生成md5 32位的字符串返回给前端使用
+
             $this->token = $token;
         }
         return $this->token;
@@ -77,15 +92,16 @@ class LoginService
      */
     function register($mobile,$password = false,$verification = false){
         if($verification){
-            if(!$this->is_verification($mobile,$verification)){
-                return false;
-            }
+            if(!$this->is_verification($mobile,$verification)) return false;
         }
         $this->user_model = User::createUser(['user_name'=>'默认用户名','mobile'=>$mobile,'password'=>$password]);
         if($this->user_model->isEmpty()){
-            //todo 错误信息 ：手机号已注册
+            //错误信息 ：手机号已注册
+            SessionService::set_error_msg('手机号已注册');
             return false;
         }
+        $fun_name = 'set_'.$this->web_name.'user_id';
+        SessionService::$fun_name($this->user_model->id);
         return $this->user_model;
     }
 
@@ -100,7 +116,8 @@ class LoginService
             $this->user_model = User::getModelForMobileAndPass($mobile,$password);
         }
         if($this->user_model->isEmpty()){
-            //todo 错误信息 ：该用户不存在
+            // 错误信息 ：该用户不存在
+            ErrorMsg::setErrorMsg('该用户不存在');
             return false;
         }
         $fun_name = 'set_'.$this->web_name.'user_id';

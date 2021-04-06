@@ -15,6 +15,22 @@ use Lcobucci\JWT\Validation\Constraint\SignedWith;
 class JwtLogic
 {
     /**
+     * 签发人
+     * @var string
+     */
+    const ISSUED_BY = 'localhost';
+
+    /**
+     * 受众
+     * @var string
+     */
+    const PERMITTED_FOR = 'localhost/user_id';
+    /**
+     * JWT ID 编号 唯一标识
+     */
+    const IDENTIFIED_BY = 'jwt_id_zhaoxihang';
+
+    /**
      * 配置秘钥加密
      * @return Configuration
      */
@@ -32,35 +48,32 @@ class JwtLogic
     /**
      * 签发令牌
      */
-    public static function createToken()
+    public static function createToken($user_id)
     {
         $config = self::getConfig();
-        assert($config instanceof Configuration);
-        $now = new DateTimeImmutable();
-        $token = $config->builder()
-            // 签发人
-            ->issuedBy('localhost')
-            // 受众
-            ->permittedFor('localhost/user_id')
-            // JWT ID 编号 唯一标识
-            ->identifiedBy('123')
-            // 签发时间
-            ->issuedAt($now)
-            // 在1分钟后才可使用
+        if($config instanceof Configuration){
+            $now = new DateTimeImmutable();
+            $token = $config->builder()
+                // 签发人
+                ->issuedBy(static::ISSUED_BY)
+                // 受众
+                ->permittedFor(static::PERMITTED_FOR)
+                // JWT ID 编号 唯一标识
+                ->identifiedBy(static::IDENTIFIED_BY)
+                // 签发时间
+                ->issuedAt($now)
+                // 在1分钟后才可使用
 //            ->canOnlyBeUsedAfter($now->modify('+1 minute'))
-            // 过期时间1小时
-            ->expiresAt($now->modify('+1 hour'))
-            // 自定义uid 额外参数
-            ->withClaim('uid', 1)
-            // 自定义header 参数
-            ->withHeader('foo', 'bar')
-            // 生成token
-            ->getToken($config->signer(), $config->signingKey());
-        //result:
-        //eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImZvbyI6ImJhciJ9.eyJpc3MiOiJodHRwOlwvXC9leGFtcGxlLmNvbSIsImF1ZCI6Imh0dHA6XC9cL2V4YW1wbGUub3JnIiwianRpIjoiNGYxZzIzYTEyYWEiLCJpYXQiOjE2MDk0Mjk3MjMsIm5iZiI6MTYwOTQyOTc4MywiZXhwIjoxNjA5NDMzMzIzLCJ1aWQiOjF9.o4uLWzZjk-GJgrxgirypHhXKkMMUEeL7z7rmvmW9Mnw
-        //base64 decode:
-        //{"typ":"JWT","alg":"HS256","foo":"bar"}{"iss":"http:\/\/example.com","aud":"http:\/\/example.org","jti":"4f1g23a12aa","iat":1609429723,"nbf":1609429783,"exp":1609433323,"uid":1}[6cb`"*Gr0ńxoL
-        return $token->toString();
+                // 过期时间1小时
+                ->expiresAt($now->modify('+1 hour'))
+                // 自定义uid 额外参数
+                ->withClaim('user_id', $user_id)
+                // 自定义header 参数
+                ->withHeader('foo', 'bar')
+                // 生成token
+                ->getToken($config->signer(), $config->signingKey());
+            return $token->toString();
+        }
     }
     /**
      * 解析令牌
@@ -75,39 +88,45 @@ class JwtLogic
         dump($token->headers()); // Retrieves the token headers
         dump($token->claims()); // Retrieves the token claims
     }
+
     /**
      * 验证令牌
+     * @param string $token
+     * @param $user_id
+     * @return bool
      */
-    public static function validationToken(string $token)
+    public static function validationToken(string $token ,$user_id)
     {
         $config = self::getConfig();
-        assert($config instanceof Configuration);
-        $token = $config->parser()->parse($token);
-        assert($token instanceof Plain);
-//Lcobucci\JWT\Validation\Constraint\IdentifiedBy: 验证jwt id是否匹配
-//Lcobucci\JWT\Validation\Constraint\IssuedBy: 验证签发人参数是否匹配
-//Lcobucci\JWT\Validation\Constraint\PermittedFor: 验证受众人参数是否匹配
-//Lcobucci\JWT\Validation\Constraint\RelatedTo: 验证自定义cliam参数是否匹配
-//Lcobucci\JWT\Validation\Constraint\SignedWith: 验证令牌是否已使用预期的签名者和密钥签名
-//Lcobucci\JWT\Validation\Constraint\StrictValidAt: ：：验证存在及其有效性的权利要求中的iat，nbf和exp（支持余地配置
-//Lcobucci\JWT\Validation\Constraint\LooseValidAt: 验证的权利要求iat，nbf和exp，当存在时（支持余地配置）
-        //验证jwt id是否匹配
-        $validate_jwt_id = new \Lcobucci\JWT\Validation\Constraint\IdentifiedBy('123');
-        $config->setValidationConstraints($validate_jwt_id);
-        //验证签发人url是否正确
-        $validate_issued = new \Lcobucci\JWT\Validation\Constraint\IssuedBy('http://example.com');
-        $config->setValidationConstraints($validate_issued);
-        //验证客户端url是否匹配
-        $validate_aud = new \Lcobucci\JWT\Validation\Constraint\PermittedFor('http://example.org');
-        $config->setValidationConstraints($validate_aud);
-        $constraints = $config->validationConstraints();
-        try {
-            $config->validator()->assert($token, ...$constraints);
-        } catch (RequiredConstraintsViolated $e) {
-            // list of constraints violation exceptions:
-            var_dump($e->violations());
-            return false;
+        if($config instanceof Configuration){
+            $token = $config->parser()->parse($token);
+            if($token instanceof Plain){
+                //Lcobucci\JWT\Validation\Constraint\IdentifiedBy: 验证jwt id是否匹配
+                //Lcobucci\JWT\Validation\Constraint\IssuedBy: 验证签发人参数是否匹配
+                //Lcobucci\JWT\Validation\Constraint\PermittedFor: 验证受众人参数是否匹配
+                //Lcobucci\JWT\Validation\Constraint\RelatedTo: 验证自定义cliam参数是否匹配
+                //Lcobucci\JWT\Validation\Constraint\SignedWith: 验证令牌是否已使用预期的签名者和密钥签名
+                //Lcobucci\JWT\Validation\Constraint\StrictValidAt: ：：验证存在及其有效性的权利要求中的iat，nbf和exp（支持余地配置
+                //Lcobucci\JWT\Validation\Constraint\LooseValidAt: 验证的权利要求iat，nbf和exp，当存在时（支持余地配置）
+                //验证jwt id是否匹配
+                $validate_jwt_id = new \Lcobucci\JWT\Validation\Constraint\IdentifiedBy(static::IDENTIFIED_BY);
+                $config->setValidationConstraints($validate_jwt_id);
+                //验证签发人url是否正确
+                $validate_issued = new \Lcobucci\JWT\Validation\Constraint\IssuedBy(static::ISSUED_BY);
+                $config->setValidationConstraints($validate_issued);
+                //验证客户端url是否匹配
+                $validate_aud = new \Lcobucci\JWT\Validation\Constraint\PermittedFor(static::PERMITTED_FOR);
+                $config->setValidationConstraints($validate_aud);
+                $constraints = $config->validationConstraints();
+                try {
+                    $config->validator()->assert($token, ...$constraints);
+                    return true;
+                } catch (RequiredConstraintsViolated $e) {
+                    // list of constraints violation exceptions:
+                    var_dump($e->violations());
+                }
+            }
         }
-        return true;
+        return false;
     }
 }

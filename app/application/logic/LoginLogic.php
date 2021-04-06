@@ -4,6 +4,7 @@
 namespace app\application\logic;
 
 
+use app\application\login\login\LoginValidate;
 use app\application\service\LoginService;
 use app\application\session\SessionService;
 
@@ -14,11 +15,11 @@ class LoginLogic
 
     public function __construct($web_name)
     {
-        $this->web_name = $web_name.'_';
+        $this->web_name = $web_name;
     }
 
-    public function hasLogin(){
-        return $this->getLoginService()->hasLogin();
+    public function hasLogin($param_token){
+        return $this->getLoginService()->hasLogin($param_token);
     }
 
     //手机号密码登录
@@ -32,9 +33,18 @@ class LoginLogic
 
     private $user_model = false;
 
+    private $token = false;
+
 
     function getUserInfo(){
         return $this->user_model;
+    }
+
+    function getToken(){
+        if($this->token == false){
+            $this->token = $this->getLoginService()->getToken();
+        }
+        return $this->token;
     }
 
     function getLoginService(){
@@ -65,8 +75,11 @@ class LoginLogic
      * @return bool
      */
     function doUserPassLogin($param){
-        // todo 校验param中是否有mobile，password
-        return $this->getLoginService()->login($param['mobile'],$param['password']);
+        // 校验param中是否有mobile，password
+        if(LoginValidate::validate_mobile_password($param['mobile'],$param['password'])){
+            return $this->getLoginService()->login($param['mobile'],$param['password']);
+        }
+        return false;
     }
 
     /**
@@ -75,8 +88,11 @@ class LoginLogic
      * @return bool
      */
     function doUserVerifyLogin($param){
-        // todo 校验param中是否有mobile，verification
-        return $this->getLoginService()->mobileVerifyLogin($param['mobile'],$param['verification']);
+        // 校验param中是否有mobile，verification
+        if(LoginValidate::validate_mobile_verification($param['mobile'],$param['verification'])){
+            return $this->getLoginService()->mobileVerifyLogin($param['mobile'],$param['verification']);
+        }
+        return false;
     }
 
     /**
@@ -86,6 +102,15 @@ class LoginLogic
      */
     function doUserRegisterLogin($param){
         // todo 校验param中是否有mobile，verification或者password
-        return $this->getLoginService()->register($param['mobile'],$param['password'],$param['verification']);
+        if(isset($param['password']) && !empty($param['password'])){
+            $param['verification'] = false;
+        };
+        if(isset($param['verification']) && !empty($param['verification'])){
+            $param['password'] = false;
+        };
+        if(LoginValidate::validate_mobile_verification_or_password($param['mobile'],$param['verification'],$param['password'])){
+            return $this->getLoginService()->register($param['mobile'],$param['password'],$param['verification']);
+        }
+        return false;
     }
 }

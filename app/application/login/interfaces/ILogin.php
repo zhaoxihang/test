@@ -7,9 +7,10 @@ interface ILogin
 {
     /**
      * 是否登录
+     * @param $param_token
      * @return mixed
      */
-    function hasLogin();
+    function hasLogin($param_token);
 
     /**
      * 登录
