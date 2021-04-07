@@ -76,7 +76,7 @@ class LoginLogic
      */
     function doUserPassLogin($param){
         // 校验param中是否有mobile，password
-        if(LoginValidate::validate_mobile_password($param['mobile'],$param['password'])){
+        if(LoginValidate::validate_mobile_password($param)){
             return $this->getLoginService()->login($param['mobile'],$param['password']);
         }
         return false;
@@ -89,7 +89,7 @@ class LoginLogic
      */
     function doUserVerifyLogin($param){
         // 校验param中是否有mobile，verification
-        if(LoginValidate::validate_mobile_verification($param['mobile'],$param['verification'])){
+        if(LoginValidate::validate_mobile_verification($param)){
             return $this->getLoginService()->mobileVerifyLogin($param['mobile'],$param['verification']);
         }
         return false;
@@ -101,14 +101,14 @@ class LoginLogic
      * @return bool|\think\Model
      */
     function doUserRegisterLogin($param){
-        // todo 校验param中是否有mobile，verification或者password
+        // 校验param中是否有mobile，verification或者password
         if(isset($param['password']) && !empty($param['password'])){
             $param['verification'] = false;
         };
         if(isset($param['verification']) && !empty($param['verification'])){
             $param['password'] = false;
         };
-        if(LoginValidate::validate_mobile_verification_or_password($param['mobile'],$param['verification'],$param['password'])){
+        if(LoginValidate::validate_mobile_verification_or_password($param)){
             return $this->getLoginService()->register($param['mobile'],$param['password'],$param['verification']);
         }
         return false;
