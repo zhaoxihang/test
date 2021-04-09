@@ -1,7 +1,7 @@
 <?php
 
 
-namespace app\application\login\login;
+namespace app\application\login\tools;
 
 
 use app\application\error\ErrorMsg;

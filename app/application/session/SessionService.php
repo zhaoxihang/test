@@ -12,6 +12,8 @@ final class SessionService
      */
     const KEY_BLOG_USER_ID = 'blog_user_id';
 
+    const KEY_ALIPAY_USER_ID = 'alipay_user_id';
+
     /**
      * 错误信息
      */
@@ -96,6 +98,30 @@ final class SessionService
      */
     static function set_blog_user_id($user_id){
         static::set(static::KEY_BLOG_USER_ID,$user_id);
+    }
+
+    /**
+     * 获取用户id
+     * @return mixed
+     */
+    static function get_alipay_user_id(){
+        return static::get(static::KEY_ALIPAY_USER_ID);
+    }
+
+    /**
+     * 删除用户id
+     * @return mixed
+     */
+    static function delete_alipay_user_id(){
+        static::delete(static::KEY_ALIPAY_USER_ID);
+    }
+
+    /**
+     * 存储用户id
+     * @param $user_id
+     */
+    static function set_alipay_user_id($user_id){
+        static::set(static::KEY_ALIPAY_USER_ID,$user_id);
     }
 
     /**

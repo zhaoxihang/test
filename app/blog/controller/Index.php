@@ -4,14 +4,12 @@
 namespace app\blog\controller;
 
 
-use app\application\logic\JWTLogic;
-use app\application\login\login\LoginBase;
+use app\application\login\Login;
 
 class Index
 {
     function index(){
-        $param = input();
-        $login = new LoginBase('blog');
+        $login = Login::getInstance('alipay','blog');
         json_data($login->login());
     }
 }
