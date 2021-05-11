@@ -5,6 +5,8 @@ namespace app\application\service;
 
 
 use app\application\alipay\Alipay;
+use app\application\alipay\easy\lib\base\oAuth\Get;
+use app\application\alipay\easy\tools\config;
 use app\application\error\ErrorMsg;
 use app\application\Logic\JwtLogic;
 use app\application\session\SessionService;
@@ -146,8 +148,9 @@ class LoginService
      * @throws \Exception
      */
     function getAlipayToken($auth_code){
-        $alipay = new Alipay();
-        return $alipay->getToken($auth_code);
+        $config = config::getConfig();
+        $factory = new Get($config);
+        return $factory->run($auth_code);
     }
 
     function is_verification($mobile,$verification) :bool

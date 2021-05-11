@@ -4,6 +4,8 @@
 namespace app\home\controller;
 
 use app\application\abstractFactory\FactoryProducer;
+use app\application\alipay\easy\lib\base\image\Upload;
+use app\application\alipay\easy\tools\config;
 use app\application\combo\lib\MealBuilder;
 use app\application\dependency_injection\Bar;
 use app\application\dependency_injection\Foo;
@@ -232,8 +234,11 @@ class Index
         Cache::set('goods_'.$goods_id,range(1,100),new \DateTime('2021-03-30 16:00:00'));
     }
 
-    function get_goods_num(){
-
+    function upload_img(){
+        $config = config::getConfig();
+        $factory = new Upload($config);
+        $result = $factory->run(['image_name'=>'aaaa','image_file'=>'image_file']);
+        dump($result);
     }
 
 }

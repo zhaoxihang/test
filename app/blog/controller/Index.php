@@ -9,7 +9,7 @@ use app\application\login\Login;
 class Index
 {
     function index(){
-        $login = Login::getInstance('alipay','blog');
+        $login = Login::getInstance(false,'blog');
         json_data($login->login());
     }
 }
