@@ -30,7 +30,6 @@
         "topthink/think-view": "^1.0",
         "zhaoxh/wechat-payment-score": "1.0.*",
         "lcobucci/jwt": "^3.4",
-        "topthink/think-swoole": "^3.1",
         "alipaysdk/easysdk": "^2.2"
     },
     "require-dev": {

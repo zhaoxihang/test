@@ -42,3 +42,8 @@ Route::get('set_goods_list','Index/set_goods_list');
  * 取出商品编号
  */
 Route::get('set_goods_list','Index/get_goods_num');
+
+/**
+ * 人类基因测试
+ */
+Route::get("chain_of_genes","Index/chain_of_genes");

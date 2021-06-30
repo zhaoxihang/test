@@ -21,6 +21,7 @@ use app\application\objectPool\WorkerPool;
 use app\application\prototype\BarBookPrototype;
 use app\application\prototype\FooBookPrototype;
 use app\calculator\Operator;
+use app\human\Men;
 use app\validate\Calculation;
 use think\exception\ValidateException;
 use think\facade\Cache;
@@ -239,6 +240,11 @@ class Index
         $factory = new Upload($config);
         $result = $factory->run(['image_name'=>'aaaa','image_file'=>'image_file']);
         dump($result);
+    }
+
+    function chain_of_genes(){
+        $men = new Men();
+        dump($men);
     }
 
 }
