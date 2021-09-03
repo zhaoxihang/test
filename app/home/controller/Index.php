@@ -25,6 +25,7 @@ use app\human\Men;
 use app\validate\Calculation;
 use think\exception\ValidateException;
 use think\facade\Cache;
+use think\facade\Filesystem;
 use think\facade\View;
 use WechatPayment\WechatBasePaymentScore;
 
@@ -245,6 +246,23 @@ class Index
     function chain_of_genes(){
         $men = new Men();
         dump($men);
+    }
+
+    function upload_csv(){
+        // 获取表单上传文件 例如上传了001.jpg
+        $file = request()->file('csv');
+        // 上传到本地服务器
+        $savename = Filesystem::disk('public')->putFile( 'topic', $file);
+    }
+
+    public function download()
+    {
+        return download('topic.csv', 'my');
+    }
+
+    public function csv()
+    {
+        return View::fetch();
     }
 
 }
