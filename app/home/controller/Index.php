@@ -184,7 +184,7 @@ class Index
 
 
     public function index(){
-        return 123456;
+        return View::fetch();
     }
 
     public function worker(){
